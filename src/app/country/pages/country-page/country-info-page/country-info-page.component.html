@@ -1,0 +1,33 @@
+<section class="mx-10">
+  <h1 class="text-3xl font-bold">{{ country().name }}</h1>
+  <div class="stats shadow my-3">
+    <div class="stat">
+      <div class="stat-title">Población con</div>
+      <div class="stat-value text-primary">{{ country().population | number}}</div>
+      <div class="stat-desc">habitantes en {{ currentYear() }}</div>
+    </div>
+  </div>
+  <br>
+  <div class="stats shadow my-3">
+    <div class="stat place-items-center">
+      <div class="stat-title">Región</div>
+      <div class="stat-value">{{ country().region }}</div>
+    </div>
+    <div class="stat place-items-center">
+      <div class="stat-title">Subregión</div>
+      <div class="stat-value">{{ country().subRegion }}</div>
+    </div>
+  </div>
+</section>
+
+<section class="m-10">
+  <figure class="diff aspect-16/9 my-3" tabindex="0">
+    <div class="diff-item-1" role="img" tabindex="0">
+      <img class="blur brightness-85" [alt]="country().name" [src]="country().flagSvg" />
+    </div>
+    <div class="diff-item-2" role="img">
+      <img [alt]="country().name" [src]="country().flagSvg" />
+    </div>
+    <div class="diff-resizer"></div>
+  </figure>
+</section>

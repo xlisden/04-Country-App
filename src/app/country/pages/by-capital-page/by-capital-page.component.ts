@@ -1,8 +1,9 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, resource } from '@angular/core';
+import { rxResource } from '@angular/core/rxjs-interop';
 import { ListComponent } from "../../components/list/list.component";
 import { SearchInputComponent } from "../../../shared/components/search-input/search-input.component";
 import { CountryService } from '../../services/country.service';
-import { Country } from '../../interfaces/country.interface';
+import { firstValueFrom, of } from 'rxjs';
 
 @Component({
   selector: 'app-by-capital-page',
@@ -11,25 +12,16 @@ import { Country } from '../../interfaces/country.interface';
 })
 export default class ByCapitalPageComponent {
   placeholder = 'Buscar por Capital';
-
   countryService = inject(CountryService);
+  query = signal('');
 
-  isLoading = signal(false);
-  isError = signal<string | null>(null);
-  countries = signal<Country[]>([]);
+  countryResource = rxResource({
+    params: () => ({ query: this.query() }),
+    stream: ({ params }) => {
+      if ( !params.query ) return of([]);
 
-  onSearch(query: string) {
-    if (this.isLoading())
-      return;
+      return this.countryService.searchByCapital(params.query)
+    },
+  });
 
-    this.isLoading.set(true);
-    this.isError.set(null);
-
-    this.countryService.searchByCapital(query).subscribe(countries => {
-      this.isLoading.set(false);
-      this.countries.set(countries);
-
-      console.log(countries);
-    });
-  }
 }

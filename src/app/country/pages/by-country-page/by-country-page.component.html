@@ -1,4 +1,13 @@
 <div class="m-4">
-  <country-search-input [placeholder]="placeholder" (inputValorEvent)="onSearch($event)" />
-  <country-list [countries]="[]" />
+  <country-search-input [placeholder]="placeholder" (inputValorEvent)="query.set($event)" />
+  @if ( countryResource.error() ) {
+    <h3>{{ countryResource.error() }}</h3>
+  } @if (countryResource.hasValue()) {
+    <country-list
+      [countries]="countryResource.value() ?? []"
+      [errorMessage]="countryResource.error()"
+      [isEmpty]="countryResource.value()?.length === 0"
+      [isLoading]="countryResource.isLoading()"
+     />
+  }
 </div>
